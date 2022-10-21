@@ -2,4 +2,4 @@
 
 Дипломный проект Яндекс.Практикум по специальности Веб-разработчик.
 
-Адрес сервера: api.moviesexplorer.maria.nomoredomains.icu
+Адрес сервера: https://api.moviesexplorer.maria.nomoredomains.icu
