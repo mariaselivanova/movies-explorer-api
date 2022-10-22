@@ -11,9 +11,9 @@ const NotFoundError = require('../errors/not-found-err');
 
 router.post('/signin', loginValidation, login);
 router.post('/signup', userValidation, createUser);
-router.use('/users', userRoutes);
-router.use('/movies', movieRoutes);
-router.all('*', (req, res, next) => {
+router.use('/users', auth, userRoutes);
+router.use('/movies', auth, movieRoutes);
+router.use(auth, (req, res, next) => {
   next(new NotFoundError('Страница с таким url не найдена'));
 });
 
