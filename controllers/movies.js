@@ -5,8 +5,7 @@ const ForbiddenError = require('../errors/forbidden-err');
 
 // Получить все фильмы, сохраненные пользователем.
 const getMovies = (req, res, next) => {
-  const owner = req.user._id;
-  Movie.find({ owner })
+  Movie.find({})
     .then((movies) => {
       if (movies !== null) {
         res.send('Ничего не найдено');
