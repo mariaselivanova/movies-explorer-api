@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 
 const { PORT = 3000, DATABASE = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
