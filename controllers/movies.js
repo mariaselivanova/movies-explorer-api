@@ -5,7 +5,7 @@ const ForbiddenError = require('../errors/forbidden-err');
 
 // Получить все фильмы, сохраненные пользователем.
 const getMovies = (req, res, next) => {
-  Movie.find({}).sort({ createdAt: -1 })
+  Movie.find({})
     .then((movies) => res.send(movies))
     .catch(next);
 };
