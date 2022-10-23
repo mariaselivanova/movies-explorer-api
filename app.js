@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, DATABASE = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -10,7 +10,7 @@ const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { limiter } = require('./middlewares/rate-limiter');
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(DATABASE, {
   useNewUrlParser: true,
 });
 app.use(express.json());
