@@ -7,7 +7,12 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const NotFound = require('../errors/not-found-err');
 const BadRequest = require('../errors/bad-request-err');
 const EmailExists = require('../errors/email-exists-err');
-const AuthError = require('../errors/auth-err');
+const EmailExistsError = require('../errors/email-exists-err');
+const {
+  BadRequestText,
+  EmailExistsText,
+  notFoundUserText,
+} = require('../config/constants');
 
 // Логин.
 const login = (req, res, next) => {
@@ -18,7 +23,7 @@ const login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', { expiresIn: '7d' });
       res.send({ token });
     })
-    .catch(() => next(new AuthError('Неверные почта или пароль')));
+    .catch(next);
 };
 
 // Создать пользователя.
@@ -37,11 +42,11 @@ const createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest('Переданы некорректные данные'));
+        next(new BadRequest(BadRequestText));
         return;
       }
       if (err.code === 11000) {
-        next(new EmailExists(`Пользователь с таким email ${req.body.email} уже существует`));
+        next(new EmailExists(EmailExistsText));
         return;
       }
       next(err);
@@ -53,7 +58,7 @@ const getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFound('Пользователь не найден');
+        throw new NotFound(notFoundUserText);
       }
       res.send(user);
     })
@@ -66,13 +71,17 @@ const updateProfile = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .then((newUser) => {
       if (!newUser) {
-        throw new NotFound('Пользователь не найден');
+        throw new NotFound(notFoundUserText);
       }
       res.send(newUser);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest('Переданы некорректные данные'));
+        next(new BadRequest(BadRequestText));
+        return;
+      }
+      if (err.code === 11000) {
+        next(new EmailExistsError(EmailExistsText));
         return;
       }
       next(err);

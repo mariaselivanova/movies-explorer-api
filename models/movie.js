@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { invalidURLText } = require('../config/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -27,7 +28,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (value) => validator.isURL(value, { protocols: ['http', 'https', 'ftp'], require_tld: true, require_protocol: true }),
-      message: 'Некорректная ссылка',
+      message: invalidURLText,
     },
   },
   trailerLink: {
@@ -35,7 +36,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (value) => validator.isURL(value, { protocols: ['http', 'https', 'ftp'], require_tld: true, require_protocol: true }),
-      message: 'Некорректная ссылка',
+      message: invalidURLText,
     },
   },
   thumbnail: {
@@ -43,7 +44,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (value) => validator.isURL(value, { protocols: ['http', 'https', 'ftp'], require_tld: true, require_protocol: true }),
-      message: 'Некорректная ссылка',
+      message: invalidURLText,
     },
   },
   owner: {
