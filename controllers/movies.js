@@ -11,7 +11,7 @@ const {
 
 // Получить все фильмы, сохраненные пользователем.
 const getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movies) => {
       res.send(movies);
     })
@@ -42,10 +42,9 @@ const deleteMovie = (req, res, next) => {
       if (req.user._id.toString() !== movie.owner.toString()) {
         throw new ForbiddenError(ForbiddenErrorText);
       }
-
-      Movie.findByIdAndDelete(req.params.moviedId)
+      movie.remove()
         .then(() => {
-          res.send({ message: filmDeleted });
+          res.send(filmDeleted);
         })
         .catch(next);
     })
