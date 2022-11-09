@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
+const cors = require('cors');
 const router = require('./routes');
 const { DATABASE } = require('./config/database');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -18,6 +19,16 @@ mongoose.connect(MONGO_DATABASE, {
 });
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cors({
+  origin: [
+    'https://api.moviesexplorer.maria.nomoredomains.icu',
+    'http://api.moviesexplorer.maria.nomoredomains.icu',
+    'https://moviesexplorer.maria.nomoredomains.icu',
+    'http://moviesexplorer.maria.nomoredomains.icu',
+    'http://localhost:3000',
+  ],
+  credentials: true,
+}));
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
